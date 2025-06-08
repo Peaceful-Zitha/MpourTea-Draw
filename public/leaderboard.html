@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MpourTea - Leaderboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fdf6e3;
+      margin: 0; padding: 20px;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: #5c3a00;
+      margin-bottom: 20px;
+    }
+    #leaderboard {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+      padding: 20px;
+      box-sizing: border-box;
+      position: relative;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0 0 20px 0;
+    }
+    li {
+      font-size: 1.1rem;
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    li:first-child {
+      background: #d4af37;
+      color: #5c3a00;
+      font-weight: bold;
+      border-radius: 8px 8px 0 0;
+    }
+    .position {
+      font-weight: 700;
+      margin-right: 10px;
+      min-width: 25px;
+    }
+    button#pickWinnerBtn {
+      background-color: #a37500;
+      color: white;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      max-width: 200px;
+      margin-bottom: 10px;
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    #loader {
+      display: none;
+      text-align: center;
+      margin-bottom: 15px;
+      font-weight: bold;
+      color: #a37500;
+    }
+
+    @media (max-width: 500px) {
+      body {
+        padding: 10px;
+      }
+      #leaderboard {
+        max-width: 100%;
+        padding: 15px;
+      }
+      li {
+        font-size: 1rem;
+        padding: 10px;
+      }
+      button#pickWinnerBtn {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Leaderboard</h1>
+  <div id="leaderboard">
+    <div id="loader">Picking a winner...</div>
+    <button id="pickWinnerBtn">Pick Winner</button>
+    <ul id="playersList"></ul>
+  </div>
+
+  <!-- 🎵 Celebration Song -->
+  <audio id="winSound" src="https://assets.mixkit.co/music/preview/mixkit-winning-a-competition-2069.mp3"></audio>
+
+  <script>
+    const pickWinnerBtn = document.getElementById('pickWinnerBtn');
+    const playersList = document.getElementById('playersList');
+    const winSound = document.getElementById('winSound');
+    const loader = document.getElementById('loader');
+
+    function loadPlayers() {
+      let players = JSON.parse(localStorage.getItem('players') || '[]');
+      renderPlayers(players);
+      return players;
+    }
+
+    function renderPlayers(players) {
+      playersList.innerHTML = '';
+      players.forEach((player, idx) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="position">${idx + 1}.</span> ${player}`;
+        playersList.appendChild(li);
+      });
+    }
+
+    function pickWinner() {
+      let players = JSON.parse(localStorage.getItem('players') || '[]');
+      if (players.length === 0) {
+        alert("No players found!");
+        return;
+      }
+
+      // Show loader and disable button
+      loader.style.display = 'block';
+      pickWinnerBtn.disabled = true;
+
+      setTimeout(() => {
+        const winnerIndex = Math.floor(Math.random() * players.length);
+        const winner = players[winnerIndex];
+
+        // Move winner to the top
+        players.splice(winnerIndex, 1);
+        players.unshift(winner);
+
+        localStorage.setItem('players', JSON.stringify(players));
+        renderPlayers(players);
+
+        // Confetti and sound
+        confetti({
+          particleCount: 250,
+          spread: 100,
+          origin: { y: 0.6 }
+        });
+        winSound.play();
+
+        // Hide loader and enable button
+        loader.style.display = 'none';
+        pickWinnerBtn.disabled = false;
+      }, 3000);
+    }
+
+    pickWinnerBtn.addEventListener('click', pickWinner);
+
+    // Initial load
+    loadPlayers();
+  </script>
+
+</body>
+</html>

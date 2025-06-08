@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MpourTea - Enter Your Name</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fdf6e3;
+      margin: 0; padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+      padding: 20px;
+    }
+    h1 {
+      color: #5c3a00;
+      margin-bottom: 15px;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1.1rem;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus {
+      border-color: #8b5e00;
+      outline: none;
+    }
+    button {
+      background-color: #a37500;
+      color: white;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      max-width: 200px;
+    }
+    button:hover {
+      background-color: #d4af37;
+      color: #5c3a00;
+    }
+    p.info {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #666;
+      max-width: 400px;
+      text-align: center;
+    }
+    /* Toast container */
+    #toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 16px;
+      position: fixed;
+      z-index: 100;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      font-size: 17px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    }
+    #toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome to MpourTea!</h1>
+  <form id="nameForm">
+    <input type="text" id="nameInput" placeholder="Enter your name" required />
+    <button type="submit">Submit</button>
+  </form>
+
+  <p class="info">Your name will be added to the leaderboard. Refresh the leaderboard page to see updates.</p>
+
+  <div id="toast"></div>
+
+  <script>
+    const form = document.getElementById('nameForm');
+    const input = document.getElementById('nameInput');
+    const toast = document.getElementById('toast');
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.className = "show";
+      setTimeout(() => {
+        toast.className = toast.className.replace("show", "");
+      }, 3000);
+    }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = input.value.trim();
+      if (!name) return;
+
+      let players = JSON.parse(localStorage.getItem('players') || '[]');
+
+      if (!players.includes(name)) {
+        players.push(name);
+        localStorage.setItem('players', JSON.stringify(players));
+        showToast(`Welcome, ${name}! You’ve been added.`);
+        input.value = '';
+      } else {
+        showToast('You are already on the leaderboard!');
+      }
+    });
+  </script>
+
+</body>
+</html>

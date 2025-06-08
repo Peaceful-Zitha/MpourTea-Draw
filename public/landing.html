@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MpourTea - Scan to Join</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 0;
+    background: #fdf6e3; /* light warm background */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+  }
+  .container {
+    max-width: 400px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  }
+  h1 {
+    margin-bottom: 10px;
+    color: #5c3a00;
+  }
+  p {
+    margin-top: 0;
+    font-size: 1.1rem;
+    line-height: 1.4;
+  }
+  .qr-code {
+    margin: 20px 0;
+  }
+  img {
+    width: 80vw;
+    max-width: 260px;
+    height: auto;
+  }
+  @media (max-width: 500px) {
+    .container {
+      margin: 15px;
+      padding: 15px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to MpourTea🍵</h1>
+    <p>Scan the QR code below with your phone to enter your name and join the leaderboard.</p>
+    <div class="qr-code">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=https://Peaceful-Zitha.github.io/MpourTea/index.html" alt="Scan QR Code to Join MpourTea" />
+    </div>
+    <p>Or open this URL on your device:<br/>
+      <a href="https://Peaceful-Zitha.github.io/MpourTea/index.html" target="_blank">https://Peaceful-Zitha.github.io/MpourTea/index.html</a>
+    </p>
+  </div>
+</body>
+</html>
